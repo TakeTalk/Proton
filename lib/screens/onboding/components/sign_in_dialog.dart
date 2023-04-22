@@ -1,47 +1,42 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:rive_animation/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../firebase_options.dart';
 import '../../entryPoint/entry_point.dart';
-import '../onboding_screen.dart';
 import 'sign_in_form.dart';
-
 
 void showCustomDialog(BuildContext context, {required ValueChanged onValue}) {
   googleLogin() async {
     print("googleLogin method Called");
-    GoogleSignIn _googleSignIn = GoogleSignIn();
+    GoogleSignIn googleSignIn = GoogleSignIn();
     try {
-      var reslut = await _googleSignIn.signIn();
-      if (reslut == null) {
+      var result = await googleSignIn.signIn();
+      if (result == null) {
         return;
       }
 
-      final userData = await reslut.authentication;
+      final userData = await result.authentication;
       final credential = GoogleAuthProvider.credential(
           accessToken: userData.accessToken, idToken: userData.idToken);
-      var finalResult =
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      print("Result $reslut");
-      print(reslut.displayName);
-      print(reslut.email);
-      print(reslut.photoUrl);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute( t
-      //     builder: (context) => const EntryPoint(),
-      //   ),
-      // );
+      print("Result $result");
+      print(result.displayName);
+      print(result.email);
+      print(result.photoUrl);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const EntryPoint(),
+        ),
+      );
       // Future.delayed(
       //     const Duration(milliseconds: 500),
       //         () async{
-      Navigator.of(context, rootNavigator: true).pop();
+      // Navigator.of(context, rootNavigator: true).pop();
       //           // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       //           //   content: Text("successfully signed in now you can chat"),
       //           // ));
@@ -51,19 +46,19 @@ void showCustomDialog(BuildContext context, {required ValueChanged onValue}) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
 // Save an integer value to 'counter' key.
-      await prefs.setString('name', reslut.displayName.toString());
-      await prefs.setString('email', reslut.email.toString());
+      await prefs.setString('name', result.displayName.toString());
+      await prefs.setString('email', result.email.toString());
 
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       } else {
         SystemNavigator.pop();
       }
-
     } catch (error) {
       print(error);
     }
   }
+
   showGeneralDialog(
     context: context,
     barrierLabel: "Barrier",
@@ -96,89 +91,86 @@ void showCustomDialog(BuildContext context, {required ValueChanged onValue}) {
             backgroundColor: Colors.transparent,
             resizeToAvoidBottomInset: false,
             body: SingleChildScrollView(
-            child: Column(
-                  children: [
-                    const Text(
-                      "Sign in",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w600,
-                      ),
+              child: Column(
+                children: [
+                  const Text(
+                    "Sign in",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        "Access to 240+ hours of content. Learn design and code, by building real apps with Flutter and Swift.",
-                        textAlign: TextAlign.center,
-                      ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      "Access to 240+ hours of content. Learn design and code, by building real apps with Flutter and Swift.",
+                      textAlign: TextAlign.center,
                     ),
-                    const SignInForm(),
-                    Row(
-                      children: const [
-                        Expanded(
-                          child: Divider(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            "OR",
-                            style: TextStyle(
-                              color: Colors.black26,
-                              fontWeight: FontWeight.w500,
-                            ),
+                  ),
+                  const SignInForm(),
+                  Row(
+                    children: const [
+                      Expanded(
+                        child: Divider(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          "OR",
+                          style: TextStyle(
+                            color: Colors.black26,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Expanded(child: Divider()),
-                      ],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Text(
-                        "Sign up with Email, Apple or Google",
-                        style: TextStyle(color: Colors.black54),
                       ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      "Sign up with Email, Apple or Google",
+                      style: TextStyle(color: Colors.black54),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          padding: EdgeInsets.zero,
-                          icon: SvgPicture.asset(
-                            "assets/icons/email_box.svg",
-                            height: 64,
-                            width: 64,
-                          ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.zero,
+                        icon: SvgPicture.asset(
+                          "assets/icons/email_box.svg",
+                          height: 64,
+                          width: 64,
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          padding: EdgeInsets.zero,
-                          icon: SvgPicture.asset(
-                            "assets/icons/apple_box.svg",
-                            height: 64,
-                            width: 64,
-                          ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        padding: EdgeInsets.zero,
+                        icon: SvgPicture.asset(
+                          "assets/icons/apple_box.svg",
+                          height: 64,
+                          width: 64,
                         ),
-                        IconButton(
-                          onPressed: () => {
+                      ),
+                      IconButton(
+                        onPressed: () => {
                           googleLogin(),
                         },
-                          padding: EdgeInsets.zero,
-                          icon: SvgPicture.asset(
-                            "assets/icons/google_box.svg",
-                            height: 64,
-                            width: 64,
-                          ),
+                        padding: EdgeInsets.zero,
+                        icon: SvgPicture.asset(
+                          "assets/icons/google_box.svg",
+                          height: 64,
+                          width: 64,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-
-
-
-          ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       );

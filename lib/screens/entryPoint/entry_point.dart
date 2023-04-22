@@ -5,7 +5,6 @@ import 'package:rive/rive.dart';
 import 'package:rive_animation/constants.dart';
 import 'package:rive_animation/screens/home/home_screen.dart';
 import 'package:rive_animation/utils/rive_utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/menu.dart';
 import 'components/btm_nav_item.dart';
@@ -51,8 +50,9 @@ class _EntryPointState extends State<EntryPoint>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200))
-      ..addListener(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    )..addListener(
         () {
           setState(() {});
         },
@@ -129,7 +129,9 @@ class _EntryPointState extends State<EntryPoint>
               },
               riveOnInit: (artboard) {
                 final controller = StateMachineController.fromArtboard(
-                    artboard, "State Machine");
+                  artboard,
+                  "State Machine",
+                );
 
                 artboard.addController(controller!);
 
@@ -173,8 +175,10 @@ class _EntryPointState extends State<EntryPoint>
                         updateSelectedBtmNav(navBar);
                       },
                       riveOnInit: (artboard) {
-                        navBar.rive.status = RiveUtils.getRiveInput(artboard,
-                            stateMachineName: navBar.rive.stateMachineName);
+                        navBar.rive.status = RiveUtils.getRiveInput(
+                          artboard,
+                          stateMachineName: navBar.rive.stateMachineName,
+                        );
                       },
                       selectedNav: selectedBottonNav,
                     );
