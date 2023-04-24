@@ -6,7 +6,7 @@ class SecondaryCourseCard extends StatelessWidget {
     Key? key,
     required this.title,
     this.iconsSrc = "assets/icons/ios.svg",
-    this.colorl = const Color(0xFF7553F6),
+    this.colorl = const Color.fromARGB(255, 75, 63, 232),
   }) : super(key: key);
 
   final String title, iconsSrc;
